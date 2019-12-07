@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SharedDataService } from '../shared-data.service';
+import { SwapiService } from '../swapi.service';
 
 @Component({
   selector: 'app-list',
@@ -21,17 +22,26 @@ export class ListPage implements OnInit {
     'build'
   ];
   public items: Array<{ title: string; note: string; icon: string }> = [];
-  constructor(private fooDataSvc: SharedDataService) {
-    for (let i = 1; i < 11; i++) {
-      this.items.push({
-        title: 'Item ' + i,
-        note: 'This is item #' + i,
-        icon: this.icons[Math.floor(Math.random() * this.icons.length)]
-      });
-    }
+  constructor(
+    private fooDataSvc: SharedDataService
+    , private swapiSvc: SwapiService
+  ) {
+
   }
 
   ngOnInit() {
+
+    this.swapiSvc.getPlanets().subscribe(
+      data => {
+        console.log(data);
+        this.items = [
+          ...this.items
+          , ...(<any> data).results.map(x => x.name)
+        ].sort();
+      }
+      , error => console.log(error)
+    );    
+
   }
   // add back when alpha.4 is out
   // navigate(item) {

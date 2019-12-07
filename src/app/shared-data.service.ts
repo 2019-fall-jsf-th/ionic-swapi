@@ -7,5 +7,5 @@ export class SharedDataService {
 
   constructor() { }
 
-  text: string;
+  text: string = 'Star Wars Planets';
 }
