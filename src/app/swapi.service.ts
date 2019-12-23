@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { merge, race, empty } from 'rxjs';
-import { expand } from 'rxjs/operators'
+import { merge, race, empty, zip, of } from 'rxjs';
+import { expand, groupBy, tap, mergeMap, toArray, map } from 'rxjs/operators'
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +27,11 @@ export class SwapiService {
         this.httpSvc.get((<any> data).next) :
         empty()
       )
+      , groupBy(x => (<any> x).results.map(y => y.climate))
+      , tap(x => console.log(x))      
+      //, mergeMap(group => zip(of(group.key), group.pipe(toArray())))
+      , map(x => ({ results: [{ name: x.key}]}))
+      //, tap(x => console.log(x))      
     );
   }
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SharedDataService } from '../shared-data.service';
 import { SwapiService } from '../swapi.service';
+import { groupBy } from 'rxjs/operators'
 
 @Component({
   selector: 'app-list',
@@ -33,7 +34,7 @@ export class ListPage implements OnInit {
 
     this.swapiSvc.getPlanets().subscribe(
       data => {
-        console.log(data);
+        //console.log(data);
         this.items = [
           ...this.items
           , ...(<any> data).results.map(x => x.name)
