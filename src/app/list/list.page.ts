@@ -30,6 +30,8 @@ export class ListPage implements OnInit {
 
   }
 
+  private failedToLoad = false;
+
   ngOnInit() {
 
     this.swapiSvc.getPlanets().subscribe(
@@ -40,7 +42,7 @@ export class ListPage implements OnInit {
           , ...(<any> data).results.map(x => x.name)
         ].sort();
       }
-      , error => console.log(error)
+      , error => this.failedToLoad = true
     );    
 
   }

@@ -2,13 +2,17 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { merge, race, empty, zip, of } from 'rxjs';
 import { expand, groupBy, tap, mergeMap, toArray, map } from 'rxjs/operators'
+import { SharedDataService } from './shared-data.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SwapiService {
 
-  constructor(private httpSvc: HttpClient) { }
+  constructor(
+    private httpSvc: HttpClient
+    , private sharedDataSvc: SharedDataService
+  ) { }
 
   getPlanets() {
     // const p1 = this.httpSvc.get("https:/swapi.co/api/planets");
@@ -21,16 +25,18 @@ export class SwapiService {
 
     // return merge(p1, p2, p3, p4, p5, p6, p7);
 
-    return this.httpSvc.get("https:/swapi.co/api/planets").pipe(
+    const url = `https:/swapi.co/api/${this.sharedDataSvc.text.toLowerCase()}`;
+
+    return this.httpSvc.get(url).pipe(
       expand(data =>
         (<any> data).next ?
         this.httpSvc.get((<any> data).next) :
         empty()
       )
-      , groupBy(x => (<any> x).results.map(y => y.climate))
-      , tap(x => console.log(x))      
+      //, groupBy(x => (<any> x).results.map(y => y.climate))
+      //, tap(x => console.log(x))      
       //, mergeMap(group => zip(of(group.key), group.pipe(toArray())))
-      , map(x => ({ results: [{ name: x.key}]}))
+      //, map(x => ({ results: [{ name: x.key}]}))
       //, tap(x => console.log(x))      
     );
   }

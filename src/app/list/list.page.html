@@ -9,8 +9,8 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <ion-list>
+<ion-content *ngIf="!failedToLoad">
+  <ion-list >
     <ion-item *ngFor="let item of items">
       {{ item }}
     </ion-item>
@@ -20,4 +20,12 @@
       You navigated here from <b>{{selectedItem.title }}</b>
     </div>
   -->
+</ion-content>
+
+<ion-content *ngIf="failedToLoad">
+  <ion-card>
+    <ion-card-content>
+      Try Planets, People, Starships
+    </ion-card-content>
+  </ion-card>
 </ion-content>
